@@ -1,0 +1,17 @@
+name: Build and Scan
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Build Image
+        run: docker build -t app:${{ github.sha }} .
+
+      - name: Scan Image
+        run: docker run --rm aquasec/trivy image app:${{ github.sha }}
